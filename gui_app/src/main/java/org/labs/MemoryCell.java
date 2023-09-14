@@ -44,7 +44,7 @@ public class MemoryCell implements Displayable {
             check();
         });
         //default color
-        button.setBorder(new LineBorder(Color.RED, 5));
+        button.setBorder(new LineBorder(Color.RED, 3));
         frame.add(textAbove);
         frame.add(button);
     }
