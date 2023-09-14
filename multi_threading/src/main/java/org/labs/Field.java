@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -16,13 +16,22 @@ public class Field extends JPanel {
     // Флаг приостановленности движения
     private boolean paused;
     // Динамический список скачущих мячей
-    private final BouncingBall[] balls = new BouncingBall[8];
+    private final BouncingBall[] balls = new BouncingBall[1];
     private int ballIndex = 0;
 
     private double clickX;
     private double clickY;
     private Optional<BouncingBall> clickedBall = Optional.empty();
     private final Wall wall;
+    private final List<List<Integer>> blocks = List.of(
+            new ArrayList<>() {{addAll(List.of(1, 1, 1, 1, 1, 1, 1, 1, 1, 1));}},
+            new ArrayList<>() {{addAll(List.of(2, 2, 2, 2, 2, 2, 2, 2, 2, 2));}},
+            new ArrayList<>() {{addAll(List.of(0, 0, 0, 0, 0, 0, 0, 0, 0, 0));}},
+            new ArrayList<>() {{addAll(List.of(0, 0, 0, 0, 0, 0, 0, 0, 0, 0));}}
+    );
+
+    private int BLOCK_HEIGHT;
+    private int BLOCK_WIDTH;
 
     // Конструктор класса BouncingBall
     public Field() {
@@ -35,8 +44,8 @@ public class Field extends JPanel {
         // Задача обработчика события ActionEvent - перерисовка окна
         Timer repaintTimer = new Timer(10, ev -> {
 // Задача обработчика события ActionEvent - перерисовка окна
-            checkCollisionWithBalls();
-            checkCollisionWithBlock();
+            checkCollisionWithBlocks();
+            checkCollisionWithWall();
             repaint();
         });
 
@@ -47,6 +56,11 @@ public class Field extends JPanel {
 
     // Унаследованный от JPanel метод перерисовки компонента
     public void paintComponent(Graphics g) {
+
+        BLOCK_WIDTH = getWidth() / blocks.get(0).size();
+        //we want to fill only 10% of the screens height
+        BLOCK_HEIGHT = (int) (getHeight() * 0.1 / blocks.size());
+
 // Вызвать версию метода, унаследованную от предка
         super.paintComponent(g);
         Graphics2D canvas = (Graphics2D) g;
@@ -54,6 +68,35 @@ public class Field extends JPanel {
         for (BouncingBall ball : balls) {
             if (ball != null) {
                 ball.paint(canvas);
+            }
+        }
+
+        for (int i = 0; i < blocks.size(); i++) {
+            for (int j = 0; j < blocks.get(i).size(); j++) {
+                if (blocks.get(i).get(j) != 0) {
+                    canvas.setColor(Color.BLACK);
+                    canvas.fillRect(
+                            j * BLOCK_WIDTH,
+                            i * BLOCK_HEIGHT,
+                            BLOCK_WIDTH,
+                            BLOCK_HEIGHT
+                    );
+
+                    canvas.setColor(Color.WHITE);
+                    //draw outline
+                    canvas.drawRect(
+                            j * BLOCK_WIDTH,
+                            i * BLOCK_HEIGHT,
+                            BLOCK_WIDTH,
+                            BLOCK_HEIGHT
+                    );
+
+                    canvas.drawString(
+                            String.valueOf(blocks.get(i).get(j)),
+                            j * BLOCK_WIDTH + BLOCK_WIDTH / 2,
+                            i * BLOCK_HEIGHT + BLOCK_HEIGHT / 2
+                    );
+                }
             }
         }
         wall.paint(canvas);
@@ -98,89 +141,7 @@ public class Field extends JPanel {
         }
     }
 
-    private void checkCollisionWithBalls() {
-        for (int i = 0; i < balls.length - 1; i++) {
-            for (int j = i + 1; j < balls.length; j++) {
-                if (balls[i] == null || balls[j] == null) {
-                    continue;
-                }
-                double distance = Math.pow(
-                        Math.pow(balls[i].getX() - balls[j].getX(), 2) +
-                                Math.pow(balls[i].getY() - balls[j].getY(), 2),
-                        0.5);
-                if (distance <= balls[i].getRadius() + balls[j].getRadius()) {
-
-                    double cx = balls[j].getX() - balls[i].getX();
-                    double cy = balls[j].getY() - balls[i].getY();
-
-                    // Вектор C (вектор, соединяющий центры шаров).
-
-                    double cSqr = cx * cx + cy * cy;
-
-                    // Скалярное произведение векторов.
-                    double scalar1 = balls[i].getSpeedX() * cx +
-                            balls[i].getSpeedY() * cy;
-
-                    double scalar2 = balls[j].getSpeedX() * cx +
-                            balls[j].getSpeedY() * cy;
-
-                    // Разложение скорости шара № 1 на нормальную и тагенсальную.
-
-                    double ball1Nvx = (cx * scalar1) / cSqr;
-                    double ball1Nvy = (cy * scalar2) / cSqr;
-                    double ball1Tvx = balls[i].getSpeedX() - ball1Nvx;
-                    double ball1Tvy = balls[i].getSpeedY() - ball1Nvy;
-
-                    // Разложение скорости шара № 2 на нормальную и тагенсальную.
-
-                    double ball2Nvx = (cx * scalar2) / cSqr;
-                    double ball2Nvy = (cy * scalar2) / cSqr;
-                    double ball2Tvx = balls[j].getSpeedX() - ball2Nvx;
-                    double ball2Tvy = balls[j].getSpeedY() - ball2Nvy;
-
-                    // Реализация обмена нормальными скоростями
-                    // (тагенсальные остаются неизменными).
-
-                    //производим пересчет тангенсальных скоростей
-                    //учитывая массу
-                    //так как масса в нашем случае зависит от объема, а объем
-                    //зависит от куба радиуса, я обозначу
-                    //куб объемя массой
-
-                    double tempX = ball1Nvx;
-                    double tempY = ball1Nvy;
-
-                    double m1 = Math.pow(balls[i].getRadius(), 3);
-                    double m2 = Math.pow(balls[j].getRadius(), 3);
-
-                    ball1Nvx = (m1 - m2) * ball1Nvx / (m1 + m2) +
-                            2 * m2 * ball2Nvx  / (m1 + m2);
-
-                    ball1Nvy = (m1 - m2) * ball1Nvy / (m1 + m2) +
-                            2 * m2 * ball2Nvy  / (m1 + m2);
-
-                    ball2Nvx = 2 * m1 * tempX / (m1 + m2)  +
-                            (m2 - m1) * ball2Nvx / (m1 + m2);
-
-                    ball2Nvy = 2 * m1 * tempY / (m1 + m2)  +
-                            (m2 - m1) * ball2Nvy / (m1 + m2);
-
-                    balls[i].setSpeed(
-                            ball1Nvx + ball1Tvx,
-                            ball1Nvy + ball1Tvy
-                    );
-
-                    balls[j].setSpeed(
-                            ball2Nvx + ball2Tvx,
-                            ball2Nvy + ball2Tvy
-                    );
-                }
-
-            }
-        }
-    }
-
-    private void checkCollisionWithBlock() {
+    private void checkCollisionWithWall() {
         for (var ball : balls) {
             if (ball == null) {
                 return;
@@ -227,6 +188,28 @@ public class Field extends JPanel {
                     abs(ballRight - wallLeft) > abs(ballLeft - wallRight)) {
                 ball.setSpeed(-ball.getSpeedX(), ball.getSpeedY());
                 return;
+            }
+        }
+    }
+
+    private void checkCollisionWithBlocks() {
+        for (var ball : balls) {
+            if (ball == null) {
+                return;
+            }
+            for (int i = 0; i < blocks.size(); i++) {
+                for (int j = 0; j < blocks.get(0).size(); j++) {
+                    if (blocks.get(i).get(j) == 0) {
+                        continue;
+                    }
+                    if (ball.getY() - ball.getRadius() <= (i + 1) * BLOCK_HEIGHT &&
+                    ball.getX() <= (j + 1) * BLOCK_WIDTH &&
+                    ball.getX() >= j * BLOCK_WIDTH
+                    ) {
+                        ball.setSpeed(ball.getSpeedX(), -ball.getSpeedY());
+                        blocks.get(i).set(j, blocks.get(i).get(j) - 1);
+                    }
+                }
             }
         }
     }

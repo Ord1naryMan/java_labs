@@ -9,8 +9,8 @@ import java.awt.geom.Rectangle2D;
 
 public class Wall {
 
-    private final double width = 50;
-    private final double height = 50;
+    private final double width = 100;
+    private final double height = 20;
     private double x = 0;
     private double y = 0;
     private final Field field;
