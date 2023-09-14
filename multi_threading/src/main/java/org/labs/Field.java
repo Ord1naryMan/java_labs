@@ -3,15 +3,14 @@ package org.labs;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.util.ArrayList;
 import java.util.Optional;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+
+import static java.lang.Math.abs;
 
 public class Field extends JPanel {
     // Флаг приостановленности движения
@@ -23,6 +22,7 @@ public class Field extends JPanel {
     private double clickX;
     private double clickY;
     private Optional<BouncingBall> clickedBall = Optional.empty();
+    private final Wall wall;
 
     // Конструктор класса BouncingBall
     public Field() {
@@ -35,12 +35,12 @@ public class Field extends JPanel {
         // Задача обработчика события ActionEvent - перерисовка окна
         Timer repaintTimer = new Timer(10, ev -> {
 // Задача обработчика события ActionEvent - перерисовка окна
-            checkCollision();
+            checkCollisionWithBalls();
+            checkCollisionWithBlock();
             repaint();
         });
 
-        addMouseListener(new BallMouseListener());
-        addMouseMotionListener(new BallMouseMotionListener());
+        wall = new Wall(this);
 
         repaintTimer.start();
     }
@@ -56,9 +56,49 @@ public class Field extends JPanel {
                 ball.paint(canvas);
             }
         }
+        wall.paint(canvas);
     }
 
-    private void checkCollision() {
+    // Метод добавления нового мяча в список
+    public void addBall() {
+//Заключается в добавлении в список нового экземпляра BouncingBall
+// Всю инициализацию положения, скорости, размера, цвета
+// BouncingBall выполняет сам в конструкторе
+        balls[ballIndex] = new BouncingBall(this);
+        ballIndex++;
+        if (ballIndex == balls.length) {
+            ballIndex = 0;
+        }
+    }
+
+    // Метод синхронизированный, т.е. только один поток может
+// одновременно быть внутри
+    public synchronized void pause() {
+// Включить режим паузы
+        paused = true;
+    }
+
+    // Метод синхронизированный, т.е. только один поток может
+// одновременно быть внутри
+    public synchronized void resume() {
+// Выключить режим паузы
+        paused = false;
+// Будим все ожидающие продолжения потоки
+        notifyAll();
+    }
+
+    // Синхронизированный метод проверки, может ли мяч двигаться
+// (не включен ли режим паузы?)
+    public synchronized void canMove() throws
+            InterruptedException {
+        if (paused) {
+// Если режим паузы включен, то поток, зашедший
+// внутрь данного метода, засыпает
+            wait();
+        }
+    }
+
+    private void checkCollisionWithBalls() {
         for (int i = 0; i < balls.length - 1; i++) {
             for (int j = i + 1; j < balls.length; j++) {
                 if (balls[i] == null || balls[j] == null) {
@@ -140,42 +180,54 @@ public class Field extends JPanel {
         }
     }
 
-    // Метод добавления нового мяча в список
-    public void addBall() {
-//Заключается в добавлении в список нового экземпляра BouncingBall
-// Всю инициализацию положения, скорости, размера, цвета
-// BouncingBall выполняет сам в конструкторе
-        balls[ballIndex] = new BouncingBall(this);
-        ballIndex++;
-        if (ballIndex == balls.length) {
-            ballIndex = 0;
-        }
-    }
+    private void checkCollisionWithBlock() {
+        for (var ball : balls) {
+            if (ball == null) {
+                return;
+            }
+            double r = ball.getRadius();
 
-    // Метод синхронизированный, т.е. только один поток может
-// одновременно быть внутри
-    public synchronized void pause() {
-// Включить режим паузы
-        paused = true;
-    }
+            double wallTop = wall.getStartY();
+            double wallLeft = wall.getStartX();
+            double wallRight = wall.getEndX();
+            double wallBottom = wall.getEndY();
 
-    // Метод синхронизированный, т.е. только один поток может
-// одновременно быть внутри
-    public synchronized void resume() {
-// Выключить режим паузы
-        paused = false;
-// Будим все ожидающие продолжения потоки
-        notifyAll();
-    }
+            double ballTop = ball.getY() - r;
+            double ballLeft = ball.getX() - r;
+            double ballRight = ball.getX() + r;
+            double ballBottom = ball.getY() + r;
 
-    // Синхронизированный метод проверки, может ли мяч двигаться
-// (не включен ли режим паузы?)
-    public synchronized void canMove() throws
-            InterruptedException {
-        if (paused) {
-// Если режим паузы включен, то поток, зашедший
-// внутрь данного метода, засыпает
-            wait();
+            if (ballTop <= wallBottom &&
+                    ball.getX() <= wallRight &&
+                    ball.getX() >= wallLeft &&
+                    abs(ballTop - wallBottom) < abs(wallTop - ballBottom)) {
+                ball.setSpeed(ball.getSpeedX(), -ball.getSpeedY());
+                return;
+            }
+
+            if (ballBottom >= wallTop &&
+                    ball.getX() <= wallRight &&
+                    ball.getX() >= wallLeft &&
+                    abs(ballTop - wallBottom) > abs(wallTop - ballBottom)) {
+                ball.setSpeed(ball.getSpeedX(), -ball.getSpeedY());
+                return;
+            }
+
+            if (ballRight >= wallLeft &&
+                    ball.getY() >= wallTop &&
+                    ball.getY() <= wallBottom &&
+                    abs(ballRight - wallLeft) < abs(ballLeft - wallRight)) {
+                ball.setSpeed(-ball.getSpeedX(), ball.getSpeedY());
+                return;
+            }
+
+            if (ballLeft <= wallRight &&
+                    ball.getY() >= wallTop &&
+                    ball.getY() <= wallBottom &&
+                    abs(ballRight - wallLeft) > abs(ballLeft - wallRight)) {
+                ball.setSpeed(-ball.getSpeedX(), ball.getSpeedY());
+                return;
+            }
         }
     }
 
@@ -192,62 +244,5 @@ public class Field extends JPanel {
             }
         }
         return Optional.empty();
-    }
-
-    public class BallMouseListener implements MouseListener {
-
-        @Override
-        public void mouseClicked(MouseEvent mouseEvent) {
-
-        }
-
-        @Override
-        public void mousePressed(MouseEvent mouseEvent) {
-            var ball = getBallClicked(mouseEvent);
-            if (ball.isPresent()) {
-                pause();
-                clickedBall = ball;
-                clickX = mouseEvent.getX();
-                clickY = mouseEvent.getY();
-            }
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent mouseEvent) {
-            if (clickedBall.isPresent()) {
-                double newSpeedX = (mouseEvent.getX() - clickX) / 20;
-                double newSpeedY = (mouseEvent.getY() - clickY) / 20;
-                clickedBall.get()
-                        .setSpeed(
-                                newSpeedX % 15,
-                                newSpeedY % 15
-                        );
-                resume();
-                clickedBall = Optional.empty();
-            }
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent mouseEvent) {
-
-        }
-
-        @Override
-        public void mouseExited(MouseEvent mouseEvent) {
-
-        }
-    }
-
-    public class BallMouseMotionListener implements MouseMotionListener {
-
-        @Override
-        public void mouseDragged(MouseEvent mouseEvent) {
-
-        }
-
-        @Override
-        public void mouseMoved(MouseEvent mouseEvent) {
-
-        }
     }
 }
