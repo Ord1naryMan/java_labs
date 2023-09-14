@@ -13,10 +13,8 @@ public class Wall {
     private final double height = 20;
     private double x = 0;
     private double y = 0;
-    private final Field field;
 
     public Wall(Field field) {
-        this.field = field;
         field.addMouseMotionListener(new WallMouseMotionListener());
     }
 

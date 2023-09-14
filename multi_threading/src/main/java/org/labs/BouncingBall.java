@@ -3,6 +3,7 @@ package org.labs;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
+import java.util.Objects;
 
 public class BouncingBall implements Runnable {
     // Максимальный радиус, который может иметь мяч
@@ -133,5 +134,23 @@ public class BouncingBall implements Runnable {
 
     public double getSpeedY() {
         return speedY;
+    }
+
+    public void setXY(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BouncingBall ball = (BouncingBall) o;
+        return radius == ball.radius && Double.compare(x, ball.x) == 0 && Double.compare(y, ball.y) == 0 && speed == ball.speed && Double.compare(speedX, ball.speedX) == 0 && Double.compare(speedY, ball.speedY) == 0 && Objects.equals(field, ball.field) && Objects.equals(color, ball.color);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(field, radius, color, x, y, speed, speedX, speedY);
     }
 }
