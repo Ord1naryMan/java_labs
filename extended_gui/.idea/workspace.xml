@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="6ac4005d-3599-4c5f-96f5-5065ae3f501b" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../demo/docker-compose.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../demo/src/main/java/com/demo/demo/Repository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../demo/src/main/java/com/demo/demo/User.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../demo/src/main/java/com/demo/demo/UserDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../demo/src/main/resources/init.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/labs/GornerTableCellRenderer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/labs/GornerTableModel.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/labs/MainFrame.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../graphics/src/main/java/org/labs/GraphicsDisplay.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../graphics/test" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../gui_app/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gui_app/src/main/java/org/labs/MemoryCell.java" beforeDir="false" afterPath="$PROJECT_DIR$/../gui_app/src/main/java/org/labs/MemoryCell.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="2VHqRf1uHE3dizV4stSUGY7PhMR" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RunManager">
+    <configuration name="MainFrame" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.labs.MainFrame" />
+      <module name="extended_gui.main" />
+      <option name="PROGRAM_PARAMETERS" value="1 0 -4" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.labs.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.MainFrame" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6ac4005d-3599-4c5f-96f5-5065ae3f501b" name="Changes" comment="" />
+      <created>1694503348065</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1694503348065</updated>
+      <workItem from="1694503349137" duration="4020000" />
+      <workItem from="1694520802584" duration="2271000" />
+      <workItem from="1694583025861" duration="8686000" />
+      <workItem from="1694593624192" duration="443000" />
+      <workItem from="1694596568506" duration="302000" />
+      <workItem from="1694597925330" duration="35000" />
+      <workItem from="1694606773096" duration="2552000" />
+      <workItem from="1694624274483" duration="6100000" />
+      <workItem from="1694694647340" duration="652000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
