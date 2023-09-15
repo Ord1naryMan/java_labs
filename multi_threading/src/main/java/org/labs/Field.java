@@ -106,6 +106,9 @@ public class Field extends JPanel {
         if (ballIndex == balls.size()) {
             balls.add(new BouncingBall(this));
         } else {
+            if (balls.get(ballIndex) != null) {
+                balls.get(ballIndex).stop();
+            }
             balls.set(ballIndex, new BouncingBall(this));
         }
         ballIndex++;
@@ -117,14 +120,6 @@ public class Field extends JPanel {
     public void addBall(double x, double y) {
         addBall();
         balls.get(balls.size() - 1).setXY(x, y);
-    }
-
-    public void removeBall() {
-        if (ballIndex == 0) {
-            balls.remove(balls.size() - 1);
-        } else {
-            balls.remove(ballIndex - 1);
-        }
     }
 
     // Метод синхронизированный, т.е. только один поток может
@@ -167,6 +162,11 @@ public class Field extends JPanel {
     }
     public void addScoreToAI() {
         aiScore++;
+    }
+
+    public void clearScore() {
+        playerScore = 0;
+        aiScore = 0;
     }
 
     private void checkCollisionWithWalls() {
@@ -293,7 +293,11 @@ public class Field extends JPanel {
             if (ballIndex == balls.size() - 1) {
                 ballIndex = 0;
             }
+            ballToRemove.stop();
             balls.remove(ballToRemove);
+            if (balls.isEmpty()) {
+                balls.add(null);
+            }
         }
     }
 

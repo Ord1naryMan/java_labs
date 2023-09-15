@@ -46,6 +46,7 @@ public class MainFrame extends JFrame {
         Action addBallAction = new AbstractAction("Добавить мяч") {
             public void actionPerformed(ActionEvent event) {
                 field.addBall();
+                field.clearScore();
                 if (!pauseMenuItem.isEnabled() &&
                         !resumeMenuItem.isEnabled()) {
 // Ни один из пунктов меню не являются
