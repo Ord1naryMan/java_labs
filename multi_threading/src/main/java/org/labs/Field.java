@@ -242,7 +242,7 @@ public class Field extends JPanel {
         }
     }
 
-    synchronized private void checkCollisionWithBuff() {
+    private void checkCollisionWithBuff() {
         boolean isAddBall = false;
         boolean isRemoveBall = false;
         BouncingBall ballToRemove = null;
