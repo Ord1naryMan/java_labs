@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d4259fb1-ec35-4aca-832e-d87f3a87b981" name="Changes" comment="task 5.6" />
+    <list default="true" id="d4259fb1-ec35-4aca-832e-d87f3a87b981" name="Changes" comment="add idea files" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -14,6 +14,18 @@
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
     </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view>
+          <tree_state>
+            <expand />
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -45,7 +57,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "chat__with__server",
+    "git-widget-placeholder": "task__2",
     "last_opened_file_path": "/mnt/126AE12C6AE10D73/dev/java/labs_2nd_course/multi_threading/src/main/java/org/labs",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -211,6 +223,7 @@
     <MESSAGE value="task_2-5 done" />
     <MESSAGE value="chat_with_server init" />
     <MESSAGE value="task 5.6" />
-    <option name="LAST_COMMIT_MESSAGE" value="task 5.6" />
+    <MESSAGE value="add idea files" />
+    <option name="LAST_COMMIT_MESSAGE" value="add idea files" />
   </component>
 </project>
