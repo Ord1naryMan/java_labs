@@ -35,9 +35,6 @@ public class MainFrame extends JFrame {
 
         setExtendedState(MAXIMIZED_BOTH);
 
-        field.setDifficulty(Difficulty.EASY);
-
-        addKeyListener(field.getWall().getKeyListener());
 
 // Создать меню
         JMenuBar menuBar = new JMenuBar();
@@ -56,33 +53,6 @@ public class MainFrame extends JFrame {
         };
         menuBar.add(ballMenu);
         ballMenu.add(addBallAction);
-
-        JMenu difficultyMenu = new JMenu("Difficulty");
-        menuBar.add(difficultyMenu);
-
-        Action difficultyEasyAction = new AbstractAction("Easy") {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                field.setDifficulty(Difficulty.EASY);
-            }
-        };
-        difficultyEasyItem = difficultyMenu.add(difficultyEasyAction);
-
-        Action difficultyNormalAction = new AbstractAction("Normal") {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                field.setDifficulty(Difficulty.NORMAL);
-            }
-        };
-        difficultyNormalItem = difficultyMenu.add(difficultyNormalAction);
-
-        Action difficultyHardAction = new AbstractAction("Hard") {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                field.setDifficulty(Difficulty.HARD);
-            }
-        };
-        difficultyHardItem = difficultyMenu.add(difficultyHardAction);
 
         JMenu controlMenu = new JMenu("Управление");
         menuBar.add(controlMenu);
