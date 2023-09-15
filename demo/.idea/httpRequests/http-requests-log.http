@@ -1,0 +1,15 @@
+POST http://localhost:8080/user
+Content-Type: application/json
+Content-Length: 72
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "emailModal": "mail",
+  "phoneModal": "132",
+  "nameModal": "asdf"
+}
+
+###
+
