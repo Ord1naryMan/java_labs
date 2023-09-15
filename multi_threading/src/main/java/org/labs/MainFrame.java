@@ -16,9 +16,6 @@ public class MainFrame extends JFrame {
     private static final int WIDTH = 700;
     private static final int HEIGHT = 500;
     private JMenuItem pauseMenuItem;
-    private JMenuItem difficultyEasyItem;
-    private JMenuItem difficultyNormalItem;
-    private JMenuItem difficultyHardItem;
     private JMenuItem resumeMenuItem;
     // Поле, по которому прыгают мячи
     private Field field = new Field();
