@@ -21,6 +21,10 @@ public class Field extends JPanel {
     }};
     private int ballIndex = 0;
     private final Wall wall;
+    private final Deleter deleter;
+    private final Cloner cloner;
+    private final Teleporter teleporter1;
+    private final Teleporter teleporter2;
     private final Wall wallWithAI;
     private String scoreText = "0:0";
 
@@ -36,11 +40,19 @@ public class Field extends JPanel {
         Timer repaintTimer = new Timer(1, ev -> {
 // Задача обработчика события ActionEvent - перерисовка окна
             checkCollisionWithWalls();
+            checkCollisionWithBuff();
             repaint();
         });
 
         wall = new Wall(this, Difficulty.EASY);
         wallWithAI = new Wall(this, true);
+        deleter = new Deleter(this);
+        cloner = new Cloner(this);
+        teleporter1 = new Teleporter(this);
+        teleporter2 = new Teleporter(this);
+
+        teleporter1.link(teleporter2);
+        teleporter2.link(teleporter1);
 
         var wallWithAIThread = new Thread(wallWithAI);
         wallWithAIThread.setDaemon(true);
@@ -75,6 +87,10 @@ public class Field extends JPanel {
         );
 
         wall.paint(canvas);
+        deleter.paint(canvas);
+        cloner.paint(canvas);
+        teleporter1.paint(canvas);
+        teleporter2.paint(canvas);
         wallWithAI.paint(canvas);
     }
 
@@ -235,5 +251,65 @@ public class Field extends JPanel {
         ballIndex = 0;
         aiScore = 0;
         playerScore = 0;
+    }
+
+    private void checkCollisionWithBuff() {
+        boolean isAddBall = false;
+        boolean isRemoveBall = false;
+        BouncingBall ballToRemove = null;
+        double whereToAddX = 0, whereToAddY = 0;
+        for (var ball : balls) {
+            if (ball == null) {
+                return;
+            }
+            if (ball.getX() <= cloner.getX() + cloner.getWidth() &&
+                    ball.getX() >= cloner.getX() &&
+                    ball.getY() <= cloner.getY() + cloner.getHeight() &&
+                    ball.getY() >= cloner.getY()) {
+                ballIndex = balls.size();
+                isAddBall = true;
+                whereToAddX = ball.getX();
+                whereToAddY = ball.getY();
+                cloner.moveToRandom();
+            }
+
+            if (ball.getX() <= deleter.getX() + deleter.getWidth() &&
+                    ball.getX() >= deleter.getX() &&
+                    ball.getY() <= deleter.getY() + deleter.getHeight() &&
+                    ball.getY() >= deleter.getY()) {
+                isRemoveBall = true;
+                ballToRemove = ball;
+                deleter.moveToRandom();
+            }
+
+            checkTeleportedAndTeleport(ball, teleporter1);
+
+            checkTeleportedAndTeleport(ball, teleporter2);
+        }
+        if (isAddBall) {
+            addBall(whereToAddX, whereToAddY);
+        }
+        if (isRemoveBall) {
+            if (ballIndex == balls.size() - 1) {
+                ballIndex = 0;
+            }
+            balls.remove(ballToRemove);
+        }
+    }
+
+    private void checkTeleportedAndTeleport(BouncingBall ball, Teleporter teleporter) {
+        if (ball.getX() <= teleporter.getX() + teleporter.getWidth() &&
+                ball.getX() >= teleporter.getX() &&
+                ball.getY() <= teleporter.getY() + teleporter.getHeight() &&
+                ball.getY() >= teleporter.getY()) {
+
+            ball.setXY(
+                    teleporter.getOther().getX(),
+                    teleporter.getOther().getY()
+            );
+
+            teleporter.moveToRandom();
+            teleporter.getOther().moveToRandom();
+        }
     }
 }
