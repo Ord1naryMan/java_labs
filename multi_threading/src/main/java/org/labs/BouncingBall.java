@@ -22,6 +22,7 @@ public class BouncingBall implements Runnable {
     private int speed;
     private double speedX;
     private double speedY;
+    private boolean stop = false;
 
     // Конструктор класса BouncingBall
     public BouncingBall(Field field) {
@@ -48,8 +49,8 @@ public class BouncingBall implements Runnable {
         color = new Color((float) Math.random(), (float) Math.random(),
                 (float) Math.random());
 // Начальное положение мяча случайно
-        x = Math.random() * (field.getSize().getWidth() - 2 * radius) + radius;
-        y = Math.random() * (field.getSize().getHeight() - 2 * radius) + radius;
+        x = field.getSize().getWidth() / 2;
+        y = field.getSize().getHeight() / 2;
 // Создаѐм новый экземпляр потока, передавая аргументом
 // ссылку на класс, реализующий Runnable (т.е. на себя)
         Thread thisThread = new Thread(this);
@@ -64,6 +65,9 @@ public class BouncingBall implements Runnable {
 // Крутим бесконечный цикл, т.е. пока нас не прервут,
 // мы не намерены завершаться
             while (true) {
+                if (stop) {
+                    return;
+                }
 // Синхронизация потоков на самом объекте поля
 // Если движение разрешено - управление будет
 // возвращено в метод
@@ -81,10 +85,12 @@ public class BouncingBall implements Runnable {
 // Достигли верхней стенки
                     speedY = -speedY;
                     y = radius;
+                    field.addScoreToPlayer();
                 } else if (y + speedY >= field.getHeight() - radius) {
 // Достигли нижней стенки
                     speedY = -speedY;
                     y = Double.valueOf(field.getHeight() - radius).intValue();
+                    field.addScoreToAI();
                 } else {
 // Просто смещаемся
                     x += speedX;
@@ -152,5 +158,9 @@ public class BouncingBall implements Runnable {
     @Override
     public int hashCode() {
         return Objects.hash(field, radius, color, x, y, speed, speedX, speedY);
+    }
+
+    public void stop() {
+        stop = true;
     }
 }
