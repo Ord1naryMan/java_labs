@@ -10,9 +10,17 @@ public class MessageHandler {
     public static ObjectInputStream receiveStream;
 
 
-    public static void send(Object object) throws IOException {
+    public static Message send(Object object) throws IOException {
         //we want to send some byte so server knows that we want to send something
         sendStream.writeByte(0);
         sendStream.writeObject(object);
+        return new Message();
+    }
+
+    public static class Message {
+        public Message also(Object o) throws IOException {
+            sendStream.writeObject(o);
+            return this;
+        }
     }
 }

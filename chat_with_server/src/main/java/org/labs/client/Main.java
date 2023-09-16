@@ -17,7 +17,7 @@ public class Main {
         MessageHandler.sendStream = sendStream;
         MessageHandler.receiveStream = receiveStream;
 
-        send("Hello server");
+        Authentication.register("test", "test".getBytes());
 
         Thread.sleep(1000);
 

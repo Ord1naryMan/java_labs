@@ -10,16 +10,17 @@ public class Main {
 
     public static final Map<String, String> privateKeys = new ConcurrentHashMap<>();
     public static final Map<Integer, Connections> connectionsMapping = new ConcurrentHashMap<>();
+    public static final Map<String, String> loginPassword = new ConcurrentHashMap<>();
+    public static final Map<String, Integer> loginPort = new ConcurrentHashMap<>();
     public static final boolean isRunning = true;
     public static ServerSocket server;
 
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) throws Exception {
         server = new ServerSocket(9090);
         ConnectionHandler connectionHandler = new ConnectionHandler();
         connectionHandler.start();
         MessageHandler messageHandler = new MessageHandler();
         messageHandler.start();
-
 
         System.out.println("Server has been initialised");
 
