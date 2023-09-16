@@ -3,6 +3,7 @@ package org.labs;
 import java.awt.BorderLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.util.Arrays;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JFrame;
@@ -21,7 +22,7 @@ public class MainFrame extends JFrame {
     private JMenuItem difficultyHardItem;
     private JMenuItem resumeMenuItem;
     // Поле, по которому прыгают мячи
-    private Field field = new Field();
+    private static Field field;
 
     // Конструктор главного окна приложения
     public MainFrame() {
@@ -38,6 +39,7 @@ public class MainFrame extends JFrame {
         field.setDifficulty(Difficulty.EASY);
 
         addKeyListener(field.getWall().getKeyListener());
+        addKeyListener(field.getWall2().getKeyListener());
 
 // Создать меню
         JMenuBar menuBar = new JMenuBar();
@@ -112,6 +114,11 @@ public class MainFrame extends JFrame {
     // Главный метод приложения
     public static void main(String[] args) {
 // Создать и сделать видимым главное окно приложения
+        if (Arrays.asList(args).contains("multiplayer")) {
+            field = new Field(true);
+        } else {
+            field = new Field(false);
+        }
         MainFrame frame = new MainFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);

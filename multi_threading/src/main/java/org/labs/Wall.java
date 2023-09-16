@@ -19,6 +19,7 @@ public class Wall implements Runnable{
 
     private WallKeyboardListener wallKeyboardListener;
     private boolean hasAI = false;
+    private boolean isSecond = false;
     private final Field field;
 
     public Wall(Field field, boolean hasAi) {
@@ -52,7 +53,7 @@ public class Wall implements Runnable{
     }
 
     private void moveToStart() {
-        if (hasAI) {
+        if (hasAI || isSecond) {
             y = height * 3;
         } else {
             y = field.getToolkit().getScreenSize().getHeight() - height * 8;
@@ -129,6 +130,10 @@ public class Wall implements Runnable{
         }
     }
 
+    public void makeSecond() {
+        isSecond = true;
+    }
+
     public class WallKeyboardListener implements KeyListener {
 
         @Override
@@ -137,14 +142,16 @@ public class Wall implements Runnable{
 
         @Override
         public void keyPressed(KeyEvent keyEvent) {
-            if (keyEvent.getKeyCode() == 39) {
+            if ((keyEvent.getKeyCode() == 39 && !isSecond) ||
+                    (isSecond && keyEvent.getKeyCode() == 68)) {
                 x += MOVEMENT_SPEED;
                 if (x > field.getWidth()) {
                     x = field.getWidth();
                 }
             }
 
-            if (keyEvent.getKeyCode() == 37) {
+            if ((keyEvent.getKeyCode() == 37 && !isSecond) ||
+                    (isSecond && keyEvent.getKeyCode() == 65)) {
                 x -= MOVEMENT_SPEED;
                 if (x < 0) {
                     x = 0;

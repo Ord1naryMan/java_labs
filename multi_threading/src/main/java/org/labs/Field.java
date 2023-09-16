@@ -25,12 +25,12 @@ public class Field extends JPanel {
     private final Cloner cloner;
     private final Teleporter teleporter1;
     private final Teleporter teleporter2;
-    private final Wall wallWithAI;
+    private final Wall wall2;
     private String scoreText = "0:0";
 
     // Конструктор класса BouncingBall
-    public Field() {
-// Установить цвет заднего фона белым
+
+    public Field(boolean isMultiplayer) {
         setBackground(Color.WHITE);
 // Запустить таймер
         // Класс таймер отвечает за регулярную генерацию событий ActionEvent
@@ -45,7 +45,6 @@ public class Field extends JPanel {
         });
 
         wall = new Wall(this, Difficulty.EASY);
-        wallWithAI = new Wall(this, true);
         deleter = new Deleter(this);
         cloner = new Cloner(this);
         teleporter1 = new Teleporter(this);
@@ -54,9 +53,16 @@ public class Field extends JPanel {
         teleporter1.link(teleporter2);
         teleporter2.link(teleporter1);
 
-        var wallWithAIThread = new Thread(wallWithAI);
-        wallWithAIThread.setDaemon(true);
-        wallWithAIThread.start();
+        if (isMultiplayer) {
+            //make second wall
+            wall2 = new Wall(this, Difficulty.EASY);
+            wall2.makeSecond();
+        } else {
+            wall2 = new Wall(this, true);
+            var wallWithAIThread = new Thread(wall2);
+            wallWithAIThread.setDaemon(true);
+            wallWithAIThread.start();
+        }
 
         repaintTimer.start();
     }
@@ -91,7 +97,7 @@ public class Field extends JPanel {
         cloner.paint(canvas);
         teleporter1.paint(canvas);
         teleporter2.paint(canvas);
-        wallWithAI.paint(canvas);
+        wall2.paint(canvas);
     }
 
     public void setDifficulty(Difficulty diff) {
@@ -169,9 +175,13 @@ public class Field extends JPanel {
         aiScore = 0;
     }
 
+    public Wall getWall2() {
+        return wall2;
+    }
+
     private void checkCollisionWithWalls() {
         checkCollisionWithWall(wall);
-        checkCollisionWithWall(wallWithAI);
+        checkCollisionWithWall(wall2);
     }
 
     private void checkCollisionWithWall(Wall wall) {
