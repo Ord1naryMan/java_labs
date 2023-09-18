@@ -19,7 +19,8 @@ public class MessageHandler extends Thread {
                                 .readObject();
                         handleAction(user.getValue(), action);
                     }
-                } catch (IOException ignored) {
+                } catch (IOException e) {
+                    System.out.println("some IOException has occurred MessageHandler.class line 23");
                 } catch (ClassNotFoundException e) {
                     throw new RuntimeException("something wrong have been sent");
                 }
@@ -31,9 +32,60 @@ public class MessageHandler extends Thread {
         switch (action) {
             case "register:" -> {
                 String login = (String) connections.receiveStream.readObject();
-                byte[] pass = (byte[]) connections.receiveStream.readObject();
-                System.out.println(login + " " + new String(pass));
+                String pass = (String) connections.receiveStream.readObject();
+                AuthenticationHandler.register(login, pass);
             }
+            case "disconnect:" -> disconnect(connections.socket.getPort());
+            case "login:" -> {
+                String login = (String) connections.receiveStream.readObject();
+                String pass = (String) connections.receiveStream.readObject();
+                AuthenticationHandler.login(login, pass, connections);
+            }
+            default -> {
+                String login = Main.portLogin.get(connections.socket.getPort());
+                System.out.println(action + " from: " + login);
+            }
+
+        }
+    }
+
+    private void disconnect(Integer port) {
+        String login = Main.portLogin.get(port);
+        System.out.printf("User %s disconnected!", login);
+        System.out.println();
+        Main.connectionsMapping.remove(port);
+        if (login == null) {
+            return;
+        }
+        Main.loginPort.remove(login);
+        Main.portLogin.remove(port);
+    }
+
+    public static Message send(Object object, Connections connections) {
+        //we want to send some byte so server knows that we want to send something
+        try {
+            connections.sendStream.writeByte(0);
+            connections.sendStream.writeObject(object);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return new Message(connections);
+    }
+
+    public static class Message {
+
+        private final Connections connections;
+
+        public Message(Connections connections) {
+            this.connections = connections;
+        }
+        public Message also(Object o) {
+            try {
+                connections.sendStream.writeObject(o);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            return this;
         }
     }
 }

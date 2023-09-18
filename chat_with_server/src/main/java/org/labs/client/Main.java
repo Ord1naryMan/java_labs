@@ -10,6 +10,8 @@ import static org.labs.client.MessageHandler.send;
 
 public class Main {
 
+    public static boolean isRuning = true;
+
     public static void main(String[] args) throws IOException, InterruptedException, ClassNotFoundException {
         Socket socket = new Socket("localhost", 9090);
         ObjectOutputStream sendStream = new ObjectOutputStream(socket.getOutputStream());
@@ -18,8 +20,14 @@ public class Main {
         MessageHandler.receiveStream = receiveStream;
 
         Authentication.register("test", "test".getBytes());
+        Thread.sleep(100);
+        Authentication.login("test", "test1".getBytes());
+        Authentication.login("test", "test".getBytes());
+        MessageHandler.send("Hello world");
+        Authentication.disconnect();
 
         Thread.sleep(1000);
+        isRuning = false;
 
         sendStream.close();
         receiveStream.close();
