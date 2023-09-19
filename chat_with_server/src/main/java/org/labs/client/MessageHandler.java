@@ -1,7 +1,5 @@
 package org.labs.client;
 
-import org.labs.server.Main;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -13,17 +11,23 @@ public class MessageHandler extends Thread {
 
     @Override
     public void run() {
-        while (org.labs.server.Main.isRunning) {
+        while (Main.isRunning) {
             try {
+                Thread.sleep(1000);
                 if (receiveStream.available() != 0) {
                     receiveStream.skipBytes(1);
+                    String from = (String) receiveStream.readObject();
                     String message = (String) receiveStream.readObject();
+                    System.out.println("New message from: " + from);
                     System.out.println(message);
                 }
             } catch (IOException e) {
-                System.out.println("some IOException has occurred MessageHandler.class line 23");
+                System.out.println(e.getMessage());
+                System.out.println("some IOException has occurred MessageHandler.class line 26");
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException("something wrong have been sent");
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
         }
 
@@ -39,6 +43,17 @@ public class MessageHandler extends Thread {
             throw new RuntimeException(e);
         }
         return new Message();
+    }
+
+    public static void sendMessageTo(String login, String message) {
+        try {
+            sendStream.writeByte(0);
+            sendStream.writeObject("send:");
+            sendStream.writeObject(login);
+            sendStream.writeObject(message);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static String receiveString() {

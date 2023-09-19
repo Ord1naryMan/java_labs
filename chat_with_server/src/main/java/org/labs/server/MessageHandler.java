@@ -41,12 +41,38 @@ public class MessageHandler extends Thread {
                 String pass = (String) connections.receiveStream.readObject();
                 AuthenticationHandler.login(login, pass, connections);
             }
+            case "find:" -> {
+                String loginToFind = (String) connections.receiveStream.readObject();
+                if (Main.loginPort.containsKey(loginToFind)) {
+                    connections.sendStream.writeObject("found");
+                } else {
+                    connections.sendStream.writeObject("notfound");
+                }
+            }
+            case "send:" -> {
+                String login = (String) connections.receiveStream.readObject();
+                String message = (String) connections.receiveStream.readObject();
+                handleMessageSending(login, message, connections);
+                System.out.println("message: " + message + " to login: " + login);
+            }
             default -> {
                 String login = Main.portLogin.get(connections.socket.getPort());
                 System.out.println(action + " from: " + login);
             }
 
         }
+    }
+
+    private static void handleMessageSending(
+            String login,
+            String message,
+            Connections connections
+    ) {
+        String loginFrom = Main.portLogin.get(connections.socket.getPort());
+        int userToPort = Main.loginPort.get(login);
+        Connections recipientConnection = Main.connectionsMapping.get(userToPort);
+        System.out.println("resolved all endpoints, trying to send a message");
+        sendMessageFrom(loginFrom, message, recipientConnection);
     }
 
     private void disconnect(Integer port) {
@@ -61,15 +87,19 @@ public class MessageHandler extends Thread {
         Main.portLogin.remove(port);
     }
 
-    public static Message send(Object object, Connections connections) {
+    public static void sendMessageFrom(
+            String login,
+            String message,
+            Connections connections
+    ) {
         //we want to send some byte so server knows that we want to send something
         try {
             connections.sendStream.writeByte(0);
-            connections.sendStream.writeObject(object);
+            connections.sendStream.writeObject(login);
+            connections.sendStream.writeObject(message);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return new Message(connections);
     }
 
     public static class Message {

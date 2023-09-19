@@ -10,7 +10,7 @@ import static org.labs.client.MessageHandler.send;
 
 public class Main {
 
-    public static boolean isRuning = true;
+    public static boolean isRunning = true;
 
     public static void main(String[] args) throws IOException, InterruptedException, ClassNotFoundException {
         Socket socket = new Socket("localhost", 9090);
@@ -19,15 +19,27 @@ public class Main {
         MessageHandler.sendStream = sendStream;
         MessageHandler.receiveStream = receiveStream;
 
+        MessageHandler messageHandler = new MessageHandler();
+        messageHandler.start();
+
+        System.out.println("trying to register");
+
         Authentication.register("test", "test".getBytes());
+        System.out.println("registered");
         Thread.sleep(100);
+        System.out.println("trying to login with incorrect password");
         Authentication.login("test", "test1".getBytes());
+        System.out.println("trying to login with correct password");
         Authentication.login("test", "test".getBytes());
-        MessageHandler.send("Hello world");
+        System.out.println("trying to send a message");
+        MessageHandler.sendMessageTo("test", "Hello world");
+        Thread.sleep(10000);
+        System.out.println("disconnecting");
         Authentication.disconnect();
 
-        Thread.sleep(1000);
-        isRuning = false;
+        isRunning = false;
+
+        messageHandler.join();
 
         sendStream.close();
         receiveStream.close();

@@ -29,11 +29,10 @@ public class Main {
 
         System.out.println("Server has been initialised");
 
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter 'exit' to exit");
-        if (scanner.nextLine().equals("exit")) {
-            Main.isRunning = false;
-        }
+        new Scanner(System.in).next();
+        System.out.println("Press any button to exit");
+        Main.isRunning = false;
+
 
         System.out.println("Exiting!!!");
 
