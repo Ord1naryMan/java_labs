@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="af8c24c2-dc2e-4885-a260-ebb8d68f20f8" name="Changes" comment="done" />
+    <list default="true" id="af8c24c2-dc2e-4885-a260-ebb8d68f20f8" name="Changes" comment="done">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gui_app/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../gui_app/.idea/misc.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -45,6 +48,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "dev",
     "last_opened_file_path": "/mnt/126AE12C6AE10D73/dev/java/IntelliJ/test",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -143,6 +147,7 @@
       <workItem from="1695144748249" duration="939000" />
       <workItem from="1695149987545" duration="660000" />
       <workItem from="1695201105875" duration="6129000" />
+      <workItem from="1695216273318" duration="4000" />
     </task>
     <task id="LOCAL-00001" summary="add registration and login">
       <option name="closed" value="true" />
