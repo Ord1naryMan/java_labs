@@ -5,8 +5,17 @@ import java.io.IOException;
 
 public class AuthenticationHandler {
 
-    public static void register(String login, String password) {
-        Main.authPassword.put(login, password);
+    public static void register(String login, String password, Connections connections) {
+        try {
+            if (Main.authPassword.containsKey(login)) {
+                connections.sendStream.writeObject("failure");
+                return;
+            }
+            Main.authPassword.put(login, password);
+            connections.sendStream.writeObject("success");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static void login(String login, String pass, Connections connections) {

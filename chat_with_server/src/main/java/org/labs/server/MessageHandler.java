@@ -33,7 +33,7 @@ public class MessageHandler extends Thread {
             case "register:" -> {
                 String login = (String) connections.receiveStream.readObject();
                 String pass = (String) connections.receiveStream.readObject();
-                AuthenticationHandler.register(login, pass);
+                AuthenticationHandler.register(login, pass, connections);
             }
             case "disconnect:" -> disconnect(connections.socket.getPort());
             case "login:" -> {

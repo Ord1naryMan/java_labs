@@ -1,11 +1,6 @@
 package org.labs.server;
 
-import java.io.IOException;
 import java.net.ServerSocket;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
-import java.sql.SQLOutput;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
@@ -29,8 +24,8 @@ public class Main {
 
         System.out.println("Server has been initialised");
 
+        System.out.println("Enter anything to exit");
         new Scanner(System.in).next();
-        System.out.println("Press any button to exit");
         Main.isRunning = false;
 
 

@@ -1,6 +1,5 @@
 package org.labs.client;
 
-import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -19,7 +18,7 @@ public class Authentication {
         }
     }
 
-    public static void register(String login, byte[] password) {
+    public static String register(String login, byte[] password) {
         String hashedPasswd =
                 new String(messageDigest.digest(password));
 
@@ -27,13 +26,15 @@ public class Authentication {
         send("register:")
                 .also(login)
                 .also(hashedPasswd);
+
+        return MessageHandler.receiveString();
     }
 
     public static void disconnect() {
         send("disconnect:");
     }
 
-    public static void login(String login, byte[] passwd) {
+    public static String login(String login, byte[] passwd) {
         String hashedPasswd =
                 new String(messageDigest.digest(passwd));
 
@@ -42,10 +43,6 @@ public class Authentication {
                 .also(login)
                 .also(hashedPasswd);
 
-        String answer = MessageHandler.receiveString();
-        if (answer.equals("invalid")) {
-            System.out.println("Invalid password!");
-            //TODO show user error
-        }
+        return MessageHandler.receiveString();
     }
 }

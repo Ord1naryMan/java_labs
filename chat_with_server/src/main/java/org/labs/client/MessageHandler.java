@@ -1,5 +1,8 @@
 package org.labs.client;
 
+import org.labs.ui.ApplicationRunner;
+import org.labs.ui.MessagingFrame;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -11,7 +14,7 @@ public class MessageHandler extends Thread {
 
     @Override
     public void run() {
-        while (Main.isRunning) {
+        while (ApplicationRunner.isRunning) {
             try {
                 Thread.sleep(1000);
                 if (receiveStream.available() != 0) {
@@ -20,6 +23,7 @@ public class MessageHandler extends Thread {
                     String message = (String) receiveStream.readObject();
                     System.out.println("New message from: " + from);
                     System.out.println(message);
+                    MessagingFrame.receiveMessage(from, message);
                 }
             } catch (IOException e) {
                 System.out.println(e.getMessage());
@@ -43,6 +47,18 @@ public class MessageHandler extends Thread {
             throw new RuntimeException(e);
         }
         return new Message();
+    }
+
+    public static String find(String login) {
+        try {
+            sendStream.writeByte(0);
+            sendStream.writeObject("find:");
+            sendStream.writeObject(login);
+
+            return (String) receiveStream.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static void sendMessageTo(String login, String message) {

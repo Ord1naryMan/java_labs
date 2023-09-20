@@ -4,15 +4,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.Arrays;
-
-import static org.labs.client.MessageHandler.send;
 
 public class Main {
 
     public static boolean isRunning = true;
 
-    public static void main(String[] args) throws IOException, InterruptedException, ClassNotFoundException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         Socket socket = new Socket("localhost", 9090);
         ObjectOutputStream sendStream = new ObjectOutputStream(socket.getOutputStream());
         ObjectInputStream receiveStream = new ObjectInputStream(socket.getInputStream());
@@ -24,6 +21,7 @@ public class Main {
 
         System.out.println("trying to register");
 
+
         Authentication.register("test", "test".getBytes());
         System.out.println("registered");
         Thread.sleep(100);
@@ -32,6 +30,7 @@ public class Main {
         System.out.println("trying to login with correct password");
         Authentication.login("test", "test".getBytes());
         System.out.println("trying to send a message");
+        MessageHandler.find("test");
         MessageHandler.sendMessageTo("test", "Hello world");
         Thread.sleep(10000);
         System.out.println("disconnecting");
