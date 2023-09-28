@@ -5,6 +5,7 @@ import com.labs.ad_board.dto.UserLoginDto;
 import com.labs.ad_board.dto.UserReadDto;
 import com.labs.ad_board.exception.EmailException;
 import com.labs.ad_board.exception.UsernameException;
+import com.labs.ad_board.service.ReCaptchaValidationService;
 import com.labs.ad_board.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ import java.util.List;
 public class AuthController {
 
     private final UserService userService;
+    private final ReCaptchaValidationService validator;
 
     @GetMapping("/register")
     public String getRegisterPage() {
@@ -40,13 +42,21 @@ public class AuthController {
     public String registerHandler(
             @ModelAttribute("user")
             UserCreateEditDto user,
-            Model model,
-            HttpServletRequest request
+            @RequestParam(name="g-recaptcha-response")
+            String captcha,
+            Model model
     ) {
         log.info(user.toString());
+        log.info("Captcha: " + captcha);
 
         List<String> errors = new ArrayList<>();
 
+        if(!validator.validateCaptcha(captcha)) {
+            log.info("Captcha verification failed!");
+            errors.add("Please Verify Captcha");
+            model.addAttribute("errors", errors);
+            return "register";
+        }
         if (userService.usernameExist(user.getUsername())) {
             errors.add("Username exist!");
         }
