@@ -16,4 +16,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query("select u from User u where UPPER(u.username) = UPPER(:username)")
     Optional<User> loadUserByUsername(String username);
+
+    @Query("select u.username from User u where u.id = :id")
+    Optional<String> getUsernameByUserId(int id);
 }

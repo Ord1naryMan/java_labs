@@ -10,6 +10,8 @@ import com.labs.ad_board.exception.UsernameException;
 import com.labs.ad_board.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +26,36 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
+    public String getUsernameOfCurrentUser() {
+        Object principal = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+        String username;
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails) principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+        log.info("returning username of current user: " + username);
+        return username;
+    }
+
+    public String getUsernameByUserId(int id) {
+        return userRepository.getUsernameByUserId(id)
+                .orElseThrow(() -> new UsernameException("No user with id " + id));
+    }
+
+    public int getUserIdByUsername(String username) {
+        int uId = userRepository.loadUserByUsername(username)
+                .orElseThrow(() -> new UsernameException(
+                    "No user with username " + username
+                ))
+            .getId();
+        log.info("Users id is " + uId);
+        return uId;
+    }
+
     @Transactional
     public UserReadDto registerNewUserAccount(UserCreateEditDto userCreateEditDto) {
         if (emailExist(userCreateEditDto.getEmail())) {
@@ -34,7 +66,7 @@ public class UserService {
         }
 
         //by default all users are USER
-        //can be set to ADMIN though 'admin page'
+        //can be set to ADMIN through 'admin page'
         userCreateEditDto.setRole(Role.USER);
 
         return userMapper.map(
@@ -49,5 +81,11 @@ public class UserService {
     }
     public boolean usernameExist(String username) {
         return userRepository.countUserByUsername(username) == 1;
+    }
+
+    public UserReadDto loadUserByUsername(String username) {
+        return userRepository.loadUserByUsername(username)
+            .map(userMapper::map)
+            .orElseThrow(() -> new UsernameException("Username not found!"));
     }
 }

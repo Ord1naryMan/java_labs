@@ -37,12 +37,19 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
+
+                        .requestMatchers(
+                            mvc.pattern("/ad/create")
+                        ).authenticated()
+
                         .requestMatchers(
                                 mvc.pattern("/"),
 //                                mvc.pattern("/home"),
                                 mvc.pattern("/error"),
                                 mvc.pattern("/WEB-INF/jsp/**"),
-                                mvc.pattern("/register")
+                                mvc.pattern("/register"),
+                                mvc.pattern("/ad"),
+                                mvc.pattern("/ad/*")
                         ).permitAll()
 //                        .requestMatchers("/adminpage").hasAuthority(Role.ADMIN.getAuthority())
                         .anyRequest().authenticated()
@@ -50,7 +57,7 @@ public class SecurityConfiguration {
                 .formLogin(login -> login
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/home")
+                        .defaultSuccessUrl("/user")
                         .permitAll()
                 )
                 .logout(LogoutConfigurer::permitAll)

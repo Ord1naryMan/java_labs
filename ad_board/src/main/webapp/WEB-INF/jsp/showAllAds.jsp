@@ -7,6 +7,8 @@
 </head>
 <body>
 
+<c:import url="header/header_importer.jsp"/>
+
 <style>
     .required::after {
         content: ' *';
@@ -47,10 +49,5 @@
 
     <input id="submitbutton" type="submit" value="Login">
 </form>
-
-<br>
-<br>
-
-<a href="/login">Already have an account</a>
 </body>
 </html>
