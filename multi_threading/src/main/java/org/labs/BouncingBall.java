@@ -15,6 +15,8 @@ public class BouncingBall implements Runnable {
     private final Field field;
     private final int radius;
     private final Color color;
+    //time of last hit with wall
+    private long lastHit = 0;
     // Текущие координаты мяча
     private double x;
     private double y;
@@ -152,5 +154,13 @@ public class BouncingBall implements Runnable {
     @Override
     public int hashCode() {
         return Objects.hash(field, radius, color, x, y, speed, speedX, speedY);
+    }
+
+    public long getLastHit(){
+        return lastHit;
+    }
+
+    public void setLastHit(long l){
+        lastHit = l;
     }
 }

@@ -3,6 +3,8 @@ package org.labs;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
@@ -235,7 +237,14 @@ public class Field extends JPanel {
                     ball.getX() >= j * BLOCK_WIDTH
                     ) {
                         ball.setSpeed(ball.getSpeedX(), -ball.getSpeedY());
-                        blocks.get(i).set(j, blocks.get(i).get(j) - 1);
+                        long currentTimeStamp = Timestamp
+                            .valueOf(LocalDateTime.now()).getTime();
+                        //if last hit was more than 100ms ago remove one
+                        //health point from wall
+                        if (currentTimeStamp - ball.getLastHit() > 100) {
+                            blocks.get(i).set(j, blocks.get(i).get(j) - 1);
+                        }
+                        ball.setLastHit(currentTimeStamp);
                     }
                 }
             }
