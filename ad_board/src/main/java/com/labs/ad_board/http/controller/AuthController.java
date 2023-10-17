@@ -86,35 +86,4 @@ public class AuthController {
         }
         return "login";
     }
-
-//    @PostMapping("/login")
-//    public String loginHandler(
-//            @RequestBody
-//            UserLoginDto userLoginDto,
-//            Model model
-//    ) {
-//        log.info("Trying to login");
-//
-//        log.info(userLoginDto.toString());
-//
-//        log.info("checking password");
-//        boolean isRightPassword = userService.areThePasswordsSame(
-//                userLoginDto.getUsername(),
-//                passwordEncoder.encode(userLoginDto.getPassword())
-//        );
-//
-//        if (!userService.usernameExist(userLoginDto.getUsername()) ||
-//            !isRightPassword) {
-//            log.info("sending error info");
-//            model.addAttribute(
-//                    "error",
-//                    "incorrect email or username"
-//            );
-//            return "login";
-//        }
-//
-//
-//
-//        return "home";
-//    }
 }
