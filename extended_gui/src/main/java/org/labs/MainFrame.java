@@ -56,7 +56,7 @@ public class MainFrame extends JFrame {
             GornerTableCellRenderer();
     private GornerTableModel data;
 
-    private static final String F_NAME_PHOTO = "/mnt/126AE12C6AE10D73/dev/java/labs_2nd_course/extended_gui/src/main/resources/kermit.jpg";
+    private static final String F_NAME_PHOTO = "src/main/resources/kermit.jpg";
 
     public MainFrame(Double[] coefficients) {
         super("Табулирование многочлена на отрезке по схеме Горнера");

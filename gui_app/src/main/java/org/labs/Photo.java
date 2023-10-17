@@ -10,12 +10,8 @@ import java.util.Map;
 
 public class Photo implements Displayable {
 
-    private static final String F_NAME_1 = "/mnt/126AE12C6AE10D73/" +
-            "dev/java/labs_2nd_course/" +
-            "gui_app/src/main/resources/png1.png";
-    private static final String F_NAME_2 = "/mnt/126AE12C6AE10D73/" +
-            "dev/java/labs_2nd_course/" +
-            "gui_app/src/main/resources/png2.png";
+    private static final String F_NAME_1 = "src/main/resources/png1.png";
+    private static final String F_NAME_2 = "src/main/resources/png2.png";
 
     private final ImageIcon image1;
     private final ImageIcon image2;

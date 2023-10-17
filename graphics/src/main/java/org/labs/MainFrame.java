@@ -44,8 +44,7 @@ public class MainFrame extends JFrame {
 
     public MainFrame() {
 // Вызов конструктора предка Frame
-        super("Построение графиков функций на основе заранее " +
-                "подготовленных файлов");
+        super("Graphics visualise");
 // Установка размеров окна
         setSize(WIDTH, HEIGHT);
         Toolkit kit = Toolkit.getDefaultToolkit();
@@ -60,11 +59,10 @@ public class MainFrame extends JFrame {
 // Добавить пункт меню "Файл"
 
 
-        JMenu fileMenu = new JMenu("Файл");
+        JMenu fileMenu = new JMenu("File");
         menuBar.add(fileMenu);
 // Создать действие по открытию файла
-        Action openGraphicsAction = new AbstractAction("Открыть файл с " +
-                "графиком") {
+        Action openGraphicsAction = new AbstractAction("Open graph file") {
 
 	    public void actionPerformed(ActionEvent event) {
                 if (fileChooser == null) {
@@ -99,7 +97,7 @@ public class MainFrame extends JFrame {
 // Добавить соответствующий элемент меню
         fileMenu.add(openGraphicsAction);
         // Создать пункт меню "График"
-        JMenu graphicsMenu = new JMenu("График");
+        JMenu graphicsMenu = new JMenu("Graph");
         menuBar.add(graphicsMenu);
         // Создать действие для реакции на активацию элемента "Показывать
 //        оси координат "
@@ -132,8 +130,7 @@ public class MainFrame extends JFrame {
         graphicsMenu.add(rotatedMenuItem);
         rotatedMenuItem.setSelected(false);
 
-        Action showAxisAction = new AbstractAction("Показывать оси " +
-                "координат") {
+        Action showAxisAction = new AbstractAction("Show coordinates axis") {
             public void actionPerformed(ActionEvent event) {
 // свойство showAxis класса GraphicsDisplay истина,
 //            если элемент меню
@@ -149,8 +146,7 @@ public class MainFrame extends JFrame {
 // Элемент по умолчанию включен (отмечен флажком)
         showAxisMenuItem.setSelected(true);
         // Повторить действия для элемента "Показывать маркеры точек"
-        Action showMarkersAction = new AbstractAction("Показывать маркеры " +
-                "точек") {
+        Action showMarkersAction = new AbstractAction("Show points markers") {
 
             public void actionPerformed(ActionEvent event) {
 // по аналогии с showAxisMenuItem
